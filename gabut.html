@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Spesial Buat Lu</title>
+    <style>
+        :root {
+            --pink-soft: #fdf0f5;
+            --pink-hot: #ff4d94;
+            --coffee: #d2691e;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--pink-soft);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Animasi Background Melayang */
+        .bg-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        #container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 25px;
+            border-radius: 35px;
+            box-shadow: 0 20px 40px rgba(255, 77, 148, 0.15);
+            max-width: 80%;
+            z-index: 10;
+            border: 4px solid white;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .coffee-icon {
+            font-size: 70px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: wiggle 2s infinite ease-in-out;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-10deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.1); }
+        }
+
+        h1 {
+            color: var(--coffee);
+            font-size: 1.3rem;
+            line-height: 1.6;
+            min-height: 80px;
+            transition: opacity 0.3s;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            border: none;
+            background: linear-gradient(45deg, #ff4d94, #ff80b3);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(255, 77, 148, 0.4);
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: scale(0.9);
+        }
+
+        /* Animasi Hujan */
+        .floating {
+            position: absolute;
+            user-select: none;
+            animation: moveUp 3s linear forwards;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes moveUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .fade-out { opacity: 0; }
+        .fade-in { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-dots" id="bgDots"></div>
+
+    <iframe id="song" width="0" height="0" src="https://www.youtube.com/embed/8A8H-S5YfL8?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
+
+    <div id="container">
+        <span class="coffee-icon" id="icon">☕</span>
+        <h1 id="pesan">HAI YOGA! <br> aku mau nanya deh <br> Hari ini udah minum kopken belum?</h1>
+        <button id="btn" onclick="jalanin()">Belum nih, maksdunya belum 2x</button>
+    </div>
+
+    <script>
+        let step = 0;
+        let musicStarted = false;
+
+        const konten = [
+             { t: "WKWKWK Pantesan muka lu keliatan kurang asupan kafein gitu", b: "Hah? masa sih? emang ea??", i: "🥤" },
+            { t: "Coba deh cek gofood, siapa tau ada promo tuh", b: "Hmm males ah gamau", i: "📱" },
+            { t: "Biasanya kalo lu udah dapet kopi langsung semangat (eh gue gatau deh)", b: "sok tau lu nay, tapi iya sih", i: "⚡" },
+            { t: "Tapi jangan kebanyakan yog, ntar malah deg degan", b: "JIRRR IYAAA BENER BGT NAY", i: "☕" },
+            { t: "Kalo deg degan liat gue sih gapapa, EH BERCANDA YA JIRR! (najis)", b: "YEUU Apaasii lu gajelas kocak", i: "😜" },
+            { t: "DIH YAUDAH SIH MAAF, intinya jangan lupa ngopi ya biar harinya lancar! jangan lupa temuin gue di kopken karena hari ini gua mau kesanaa ~Nayraa", b: "IYA OKEEEE SIAP NAYYY GUA KAN KOPKEN HOLICCC!", i: "✨" }
+        ];
+
+        function jalanin() {
+            if (!musicStarted) {
+                const iframe = document.getElementById('song');
+                iframe.src += "&autoplay=1";
+                musicStarted = true;
+            }
+
+            const pesanEl = document.getElementById('pesan');
+            const btnEl = document.getElementById('btn');
+            const iconEl = document.getElementById('icon');
+
+            // Efek transisi teks
+            pesanEl.style.opacity = 0;
+            
+            setTimeout(() => {
+                if (step < konten.length) {
+                    pesanEl.innerText = konten[step].t;
+                    btnEl.innerText = konten[step].b;
+                    iconEl.innerText = konten[step].i;
+                    
+                    // Ganti animasi ikon secara acak biar lucu
+                    iconEl.style.animation = 'none';
+                    iconEl.offsetHeight; // trigger reflow
+                    iconEl.style.animation = 'wiggle 1s infinite ease-in-out';
+                    
+                    step++;
+                } else {
+                    pesanEl.innerHTML = "OKAIII semangat terus ya harinya! <br> Nih aku bonusin hujan kopi dan love love buat elu! karena udah mau tau sesuatu yg akan aku tujukin itu (rating lucu gaaaa)";
+                    btnEl.style.display = 'none';
+                    iconEl.innerText = "😎";
+                    hujanLopeKopi();
+                }
+                pesanEl.style.opacity = 1;
+            }, 300);
+        }
+
+        function hujanLopeKopi() {
+            const items = ['💗', '☕', '🗿', '💖', '🥤', '🤫', '🤣'];
+            setInterval(() => {
+                const el = document.createElement('div');
+                el.classList.add('floating');
+                el.innerText = items[Math.floor(Math.random() * items.length)];
+                el.style.left = Math.random() * 100 + "vw";
+                el.style.fontSize = Math.random() * 30 + 20 + "px";
+                el.style.animationDuration = Math.random() * 2 + 1.5 + "s";
+                document.body.appendChild(el);
+                
+                setTimeout(() => el.remove(), 3000);
+            }, 100);
+        }
+
+        // Tambah dekorasi melayang di awal
+        function createBg() {
+            const bg = document.getElementById('bgDots');
+            for(let i=0; i<15; i++) {
+                const dot = document.createElement('div');
+                dot.innerText = '✨';
+                dot.style.position = 'absolute';
+                dot.style.left = Math.random() * 100 + 'vw';
+                dot.style.top = Math.random() * 100 + 'vh';
+                dot.style.opacity = '0.3';
+                dot.style.fontSize = '20px';
+                bg.appendChild(dot);
+            }
+        }
+        createBg();
+    </script>
+</body>
+</html>
